@@ -1,7 +1,16 @@
 package com.example.demo;
 
-import javax.persistence.*;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,81 +19,49 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity(name = "Student")
 @Table(
         name = "student",
-        uniqueConstraints = {
-                @UniqueConstraint(name = "student_email_unique", columnNames = "email")
-        }
-)
+        uniqueConstraints = {@UniqueConstraint(name = "student_email_unique", columnNames = "email")})
 public class Student {
 
     @Id
     @SequenceGenerator(
             name = "student_sequence",
             sequenceName = "student_sequence",
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = SEQUENCE,
-            generator = "student_sequence"
-    )
-    @Column(
-            name = "id"
-    )
+            allocationSize = 1)
+    @GeneratedValue(strategy = SEQUENCE, generator = "student_sequence")
+    @Column(name = "id")
     private Long id;
 
-    @Column(
-            name = "first_name",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
+    @Column(name = "first_name", nullable = false, columnDefinition = "TEXT")
     private String firstName;
 
-    @Column(
-            name = "last_name",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
+    @Column(name = "last_name", nullable = false, columnDefinition = "TEXT")
     private String lastName;
 
-    @Column(
-            name = "email",
-            nullable = false,
-            columnDefinition = "TEXT"
-    )
+    @Column(name = "email", nullable = false, columnDefinition = "TEXT")
     private String email;
 
-    @Column(
-            name = "age",
-            nullable = false
-
-    )
+    @Column(name = "age", nullable = false)
     private Integer age;
 
     @OneToOne(
             mappedBy = "student",
             orphanRemoval = true,
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE}
-
-    )
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private StudentIdCard studentIdCard;
 
     @OneToMany(
             mappedBy = "student",
             orphanRemoval = true,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            fetch = FetchType.LAZY
-    )
+            fetch = FetchType.LAZY)
     private List<Book> books = new ArrayList<>();
 
     @OneToMany(
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            mappedBy = "student"
-    )
+            mappedBy = "student")
     private List<Enrolment> enrolments = new ArrayList<>();
 
-    public Student(String firstName,
-                   String lastName,
-                   String email,
-                   Integer age) {
+    public Student(String firstName, String lastName, String email, Integer age) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -92,7 +69,6 @@ public class Student {
     }
 
     public Student() {
-
     }
 
     public Long getId() {
@@ -173,12 +149,20 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", age=" + age +
-                '}';
+        return "Student{"
+                + "id="
+                + id
+                + ", firstName='"
+                + firstName
+                + '\''
+                + ", lastName='"
+                + lastName
+                + '\''
+                + ", email='"
+                + email
+                + '\''
+                + ", age="
+                + age
+                + '}';
     }
 }

@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -18,18 +17,16 @@ public interface StudentRepository extends PagingAndSortingRepository<Student, L
     Optional<Student> findStudentByEmail(String email);
 
     @Query("SELECT s FROM Student s WHERE s.firstName = ?1 AND s.age >= ?2")
-    List<Student> selectStudentWhereFirstNameAndAgeGreaterOrEqual(
-            String firstName, Integer age);
+    List<Student> selectStudentWhereFirstNameAndAgeGreaterOrEqual(String firstName, Integer age);
 
     @Query(
             value = "SELECT * FROM student WHERE first_name = :firstName AND age >= :age",
             nativeQuery = true)
     List<Student> selectStudentWhereFirstNameAndAgeGreaterOrEqualNative(
-            @Param("firstName") String firstName,
-            @Param("age") Integer age);
+            @Param("firstName") String firstName, @Param("age") Integer age);
 
     @Transactional
     @Modifying
     @Query("DELETE FROM Student u WHERE u.id = ?1")
-    int  deleteStudentById(Long id);
+    int deleteStudentById(Long id);
 }
